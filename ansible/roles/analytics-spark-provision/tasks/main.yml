@@ -111,11 +111,15 @@
 - name: Install latest ruby
   become: yes
   shell: "source {{ analytics.base_path }}/.rvm/scripts/rvm && {{ analytics.base_path }}/.rvm/bin/rvm install ruby-2.6"
+  args:
+    executable: /bin/bash
 
 - name: Set latest ruby as default
   become: yes
   become_user: "{{ analytics_user }}"
-  shell: "rvm --default use ruby-2.6"
+  shell: "source {{ analytics.base_path }}/.rvm/scripts/rvm && rvm --default use ruby-2.6"
+  args:
+    executable: /bin/bash
 
 - name: Install latest ruby-dev
   become: yes
@@ -144,7 +148,3 @@
   unarchive: src={{ analytics.soft_path }}/kafka_2.11-0.10.1.0.tgz dest={{ analytics.home }}/ copy=no owner={{ analytics_user }} group={{ analytics_group }} creates={{ analytics.home }}/kafka_2.11-0.10.1.0
   tags:
     - kafka-provision
-
-
-
-
